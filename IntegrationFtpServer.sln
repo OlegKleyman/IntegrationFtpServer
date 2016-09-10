@@ -3,8 +3,20 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{51014A67-0FC4-4D35-8C13-D58737013451}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "core", "core", "{EB3CCF76-AB42-489A-8ED5-5A304BBFD329}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "integration", "integration", "{CEB8E499-F36C-4785-BF3D-24E7C00A7728}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "unit", "unit", "{C7C5669A-10A7-47E7-AA73-DE41C0914657}"
+EndProject
 Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CEB8E499-F36C-4785-BF3D-24E7C00A7728} = {51014A67-0FC4-4D35-8C13-D58737013451}
+		{C7C5669A-10A7-47E7-AA73-DE41C0914657} = {51014A67-0FC4-4D35-8C13-D58737013451}
 	EndGlobalSection
 EndGlobal
