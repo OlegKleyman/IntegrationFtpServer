@@ -2,5 +2,6 @@
 {
     public interface ISystemProcess
     {
+        void Kill();
     }
 }
