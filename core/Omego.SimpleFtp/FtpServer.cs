@@ -24,7 +24,8 @@
 
         public FtpConfiguration Configuration { get; }
 
-        public FtpServerStatus Status { get; private set; }
+        public FtpServerStatus Status
+            => process == null || process.HasExited ? FtpServerStatus.Stopped : FtpServerStatus.Running;
 
         public void Start()
         {
@@ -37,14 +38,12 @@
 
             fileSystem.File.WriteAllBytes(tempFilePath, Assets.ftpdmin);
 
-            operatingSystem.StartProcess(tempFilePath, $"-p {Configuration.Port} \"{Configuration.HomeDirectory}\"");
-
-            Status = FtpServerStatus.Running;
+            process = operatingSystem.StartProcess(tempFilePath, $"-p {Configuration.Port} \"{Configuration.HomeDirectory}\"");
         }
 
         public void Stop()
         {
-            if (process == null || process.HasExited) throw new InvalidOperationException("Server is not running.");
+            if (Status == FtpServerStatus.Stopped) throw new InvalidOperationException("Server is not running.");
 
             process.Kill();
         }

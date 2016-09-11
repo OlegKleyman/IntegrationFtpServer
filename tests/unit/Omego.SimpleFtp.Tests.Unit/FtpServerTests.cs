@@ -46,7 +46,7 @@
         [Test]
         public void StartShouldStartServer()
         {
-            var server = GetFtpServer();
+            var server = FtpServerTestsSource.GetFtpServer();
 
             server.Start();
 
@@ -56,35 +56,63 @@
         [Test]
         public void StopShouldStopProcess()
         {
-            var server = GetFtpServer();
+            var server = FtpServerTestsSource.GetFtpServer();
+            server.Start();
             server.Stop();
+            server.Status.Should().Be(FtpServerStatus.Stopped);
         }
 
-        [Test]
-        public void StopShouldThrowInvalidOperationExceptionIfServerHasNotStarted()
+        [TestCaseSource(typeof(FtpServerTestsSource),
+             nameof(FtpServerTestsSource.StopShouldThrowInvalidOperationExceptionIfServerIsStoppedCases))]
+        public void StopShouldThrowInvalidOperationExceptionIfServerIsStopped(FtpServer server)
         {
-            var server = GetFtpServer();
             Action stop = () => server.Stop();
 
             stop.ShouldThrow<InvalidOperationException>().WithMessage("Server is not running.");
         }
 
-        private FtpServer GetFtpServer()
+        [TestCaseSource(typeof(FtpServerTestsSource), nameof(FtpServerTestsSource.StatusShouldReturnServerStatusCases))]
+        public void StatusShouldReturnServerStatus(FtpServer server, FtpServerStatus expectedStatus)
         {
-            var path = Substitute.For<PathBase>();
-            path.GetTempPath().Returns(@"C:\temp");
-            path.GetTempFileName().Returns("something");
-
-            var fileSystem = Substitute.For<IFileSystem>();
-            fileSystem.Path.Returns(path);
-
-            var operatingSystem = Substitute.For<IOperatingSystem>();
-
-            return new FtpServer(new FtpConfiguration("Home", 21), fileSystem, operatingSystem);
+            server.Status.Should().Be(expectedStatus);
         }
 
         private class FtpServerTestsSource
         {
+            public static FtpServer GetFtpServer()
+            {
+                var path = Substitute.For<PathBase>();
+                path.GetTempPath().Returns(@"C:\temp");
+                path.GetTempFileName().Returns("something");
+
+                var fileSystem = Substitute.For<IFileSystem>();
+                fileSystem.Path.Returns(path);
+
+                var systemProcess = Substitute.For<ISystemProcess>();
+                systemProcess.HasExited.Returns(false);
+                systemProcess.When(process => process.Kill()).Do(info => systemProcess.HasExited.Returns(true));
+
+                var operatingSystem = Substitute.For<IOperatingSystem>();
+                operatingSystem.StartProcess(Arg.Any<string>(), Arg.Any<string>()).Returns(systemProcess);
+
+                return new FtpServer(new FtpConfiguration("Home", 21), fileSystem, operatingSystem);
+            }
+
+            private static FtpServer StartServer(FtpServer ftpServer)
+            {
+                ftpServer.Start();
+
+                return ftpServer;
+            }
+
+            private static FtpServer StopServer(FtpServer ftpServer)
+            {
+                ftpServer.Start();
+                ftpServer.Stop();
+
+                return ftpServer;
+            }
+
             public static IEnumerable ConstructorShouldThrowArgumentExceptionWhenArgumentsAreInvalidCases
                 =>
                 new[]
@@ -95,6 +123,18 @@
                                 typeof(ArgumentNullException), null
                             }
                     };
+
+            public static IEnumerable StatusShouldReturnServerStatusCases
+                =>
+                new[]
+                    {
+                        new object[] { GetFtpServer(), FtpServerStatus.Stopped },
+                        new object[] { StartServer(GetFtpServer()), FtpServerStatus.Running },
+                        new object[] { StopServer(GetFtpServer()), FtpServerStatus.Stopped }
+                    };
+
+            public static IEnumerable StopShouldThrowInvalidOperationExceptionIfServerIsStoppedCases
+                => new[] { new object[] { GetFtpServer() }, new object[] { StopServer(GetFtpServer()) } };
         }
     }
 }
