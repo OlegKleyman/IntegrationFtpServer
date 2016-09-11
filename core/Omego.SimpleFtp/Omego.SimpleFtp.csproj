@@ -33,10 +33,28 @@
     <DocumentationFile>bin\Release\Omego.SimpleFtp.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Assets.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Assets.resx</DependentUpon>
+    </Compile>
     <Compile Include="FtpConfiguration.cs" />
     <Compile Include="FtpServer.cs" />
+    <Compile Include="FtpServerStatus.cs" />
     <Compile Include="IFtpServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Assets.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Assets.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ftpdmin.exe" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
