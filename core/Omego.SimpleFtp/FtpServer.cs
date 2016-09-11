@@ -1,8 +1,15 @@
 ﻿namespace Omego.SimpleFtp
 {
-    public class FtpServer
+    public class FtpServer : IFtpServer
     {
-        public static IFtpServer Start(string homeDirectory, int port)
+        public FtpServer(FtpConfiguration ftpConfiguration)
+        {
+            Configuration = ftpConfiguration;
+        }
+
+        public FtpConfiguration Configuration { get; }
+
+        public void Start()
         {
             throw new System.NotImplementedException();
         }

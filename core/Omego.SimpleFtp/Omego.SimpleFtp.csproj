@@ -33,6 +33,7 @@
     <DocumentationFile>bin\Release\Omego.SimpleFtp.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="FtpConfiguration.cs" />
     <Compile Include="FtpServer.cs" />
     <Compile Include="IFtpServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

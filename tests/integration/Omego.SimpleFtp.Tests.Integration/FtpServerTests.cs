@@ -8,7 +8,14 @@
         [Test]
         public void FilesShouldBeListed()
         {
-            var server = FtpServer.Start("Home", 9898);
+            var server = GetFtpServer();
+
+            server.Start();
+        }
+
+        private FtpServer GetFtpServer()
+        {
+            return new FtpServer(new FtpConfiguration("Home", 3435));
         }
     }
 }
