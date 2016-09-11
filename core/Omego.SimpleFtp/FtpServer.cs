@@ -21,6 +21,7 @@
 
         public void Start()
         {
+            //var tempPath = fileSystem.Path.GetTempFilePath();
             fileSystem.File.WriteAllBytes("ftpdmin.exe", Assets.ftpdmin);
         }
     }
