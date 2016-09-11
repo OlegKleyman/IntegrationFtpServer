@@ -1,5 +1,7 @@
 ﻿namespace Omego.SimpleFtp.Tests.Integration
 {
+    using System.IO.Abstractions;
+
     using NUnit.Framework;
 
     [TestFixture]
@@ -15,7 +17,7 @@
 
         private FtpServer GetFtpServer()
         {
-            return new FtpServer(new FtpConfiguration("Home", 3435));
+            return new FtpServer(new FtpConfiguration("Home", 3435), new FileSystem());
         }
     }
 }

@@ -1,21 +1,27 @@
 ﻿namespace Omego.SimpleFtp
 {
     using System;
+    using System.IO.Abstractions;
 
     public class FtpServer : IFtpServer
     {
-        public FtpServer(FtpConfiguration configuration)
+        private readonly IFileSystem fileSystem;
+
+        public FtpServer(FtpConfiguration configuration, IFileSystem fileSystem)
         {
             if(configuration == null) throw new ArgumentNullException(nameof(configuration));
 
             Configuration = configuration;
+            this.fileSystem = fileSystem;
         }
 
         public FtpConfiguration Configuration { get; }
 
+        public FtpServerStatus Status { get; }
+
         public void Start()
         {
-            throw new System.NotImplementedException();
+            fileSystem.File.WriteAllBytes("ftpdmin.exe", Assets.ftpdmin);
         }
     }
 }

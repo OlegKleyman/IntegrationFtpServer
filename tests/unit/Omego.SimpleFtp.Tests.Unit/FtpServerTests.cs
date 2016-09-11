@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections;
+    using System.IO.Abstractions.TestingHelpers;
 
     using FluentAssertions;
 
@@ -15,7 +16,7 @@
         {
             var ftpConfiguration = new FtpConfiguration("Home", 21);
 
-            var server = new FtpServer(ftpConfiguration);
+            var server = new FtpServer(ftpConfiguration, new MockFileSystem());
 
             server.Configuration.ShouldBeEquivalentTo(ftpConfiguration);
         }
@@ -28,7 +29,7 @@
             Type expectedType,
             FtpConfiguration configuration)
         {
-            Action constructor = () => new FtpServer(configuration);
+            Action constructor = () => new FtpServer(configuration, new MockFileSystem());
 
             constructor.ShouldThrow<ArgumentException>()
                 .WithMessage(expectedMessage)
@@ -37,6 +38,21 @@
                     "the parameter name should be of the problematic parameter")
                 .And.Should()
                 .BeOfType(expectedType);
+        }
+
+        [Test]
+        public void StartShouldStartServer()
+        {
+            var server = GetFtpServer();
+
+            server.Start();
+
+            server.Status.ShouldBeEquivalentTo(FtpServerStatus.Running);
+        }
+
+        private FtpServer GetFtpServer()
+        {
+            return new FtpServer(new FtpConfiguration("Home", 21), new MockFileSystem());
         }
 
         private class FtpServerTestsSource
