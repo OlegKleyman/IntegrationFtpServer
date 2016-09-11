@@ -28,6 +28,11 @@
         {
             var tempFilePath = fileSystem.Path.GetTempFilePath("exe");
 
+            if (!fileSystem.Directory.Exists(fileSystem.Path.GetDirectoryName(tempFilePath)))
+            {
+                fileSystem.Directory.CreateDirectory(fileSystem.Path.GetDirectoryName(tempFilePath));
+            }
+
             fileSystem.File.WriteAllBytes(tempFilePath, Assets.ftpdmin);
 
             operatingSystem.StartProcess(tempFilePath, $"-p {Configuration.Port} \"{Configuration.HomeDirectory}\"");
