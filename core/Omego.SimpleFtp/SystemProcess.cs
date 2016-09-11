@@ -1,5 +1,6 @@
 ﻿namespace Omego.SimpleFtp
 {
+    using System;
     using System.Diagnostics;
 
     public class SystemProcess : ISystemProcess
@@ -8,6 +9,8 @@
 
         public SystemProcess(Process process)
         {
+            if (process == null) throw new ArgumentNullException(nameof(process));
+
             this.process = process;
         }
 
