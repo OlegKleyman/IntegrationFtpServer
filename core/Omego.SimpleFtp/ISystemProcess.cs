@@ -3,5 +3,7 @@
     public interface ISystemProcess
     {
         void Kill();
+
+        bool HasExited { get; }
     }
 }

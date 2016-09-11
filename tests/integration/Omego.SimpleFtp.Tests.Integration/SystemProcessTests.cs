@@ -38,6 +38,29 @@
                 .BeOfType(expectedType);
         }
 
+        [Test]
+        public void HasExitedShouldReturnTrueWhenProcessHasExited()
+        {
+            var process = Process.Start("cmd.exe");
+
+            GetSystemProcess(process).Kill();
+
+            process.HasExited.Should().BeTrue();
+        }
+
+        [Test]
+        public void HasExitedShouldReturnFalseWhenProcessHasNotExitedd()
+        {
+            var process = Process.Start("cmd.exe");
+
+            GetSystemProcess(process);
+
+            process.HasExited.Should().BeFalse();
+
+            process.Kill();
+            process.WaitForExit();
+        }
+
         public static SystemProcess GetSystemProcess(Process process)
         {
             return new SystemProcess(process);

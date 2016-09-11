@@ -19,5 +19,7 @@
             process.Kill();
             process.WaitForExit();
         }
+
+        public bool HasExited => process.HasExited;
     }
 }

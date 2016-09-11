@@ -11,6 +11,8 @@
 
         private readonly IOperatingSystem operatingSystem;
 
+        private ISystemProcess process;
+
         public FtpServer(FtpConfiguration configuration, IFileSystem fileSystem, IOperatingSystem operatingSystem)
         {
             if(configuration == null) throw new ArgumentNullException(nameof(configuration));
@@ -38,6 +40,13 @@
             operatingSystem.StartProcess(tempFilePath, $"-p {Configuration.Port} \"{Configuration.HomeDirectory}\"");
 
             Status = FtpServerStatus.Running;
+        }
+
+        public void Stop()
+        {
+            if (process == null || process.HasExited) throw new InvalidOperationException("Server is not running.");
+
+            process.Kill();
         }
     }
 }

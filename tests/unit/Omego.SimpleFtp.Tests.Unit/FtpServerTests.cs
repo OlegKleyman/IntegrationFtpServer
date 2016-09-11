@@ -53,6 +53,22 @@
             server.Status.ShouldBeEquivalentTo(FtpServerStatus.Running);
         }
 
+        [Test]
+        public void StopShouldStopProcess()
+        {
+            var server = GetFtpServer();
+            server.Stop();
+        }
+
+        [Test]
+        public void StopShouldThrowInvalidOperationExceptionIfServerHasNotStarted()
+        {
+            var server = GetFtpServer();
+            Action stop = () => server.Stop();
+
+            stop.ShouldThrow<InvalidOperationException>().WithMessage("Server is not running.");
+        }
+
         private FtpServer GetFtpServer()
         {
             var path = Substitute.For<PathBase>();
