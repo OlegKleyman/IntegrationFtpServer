@@ -66,7 +66,7 @@
              nameof(FtpServerTestsSource.StopShouldThrowInvalidOperationExceptionIfServerIsStoppedCases))]
         public void StopShouldThrowInvalidOperationExceptionIfServerIsStopped(FtpServer server)
         {
-            Action stop = () => server.Stop();
+            Action stop = server.Stop;
 
             stop.ShouldThrow<InvalidOperationException>().WithMessage("Server is not running.");
         }
