@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{51014A67-0FC4-4D35-8C13-D58737013451}"
 EndProject
@@ -11,12 +11,39 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "integration", "integration"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "unit", "unit", "{C7C5669A-10A7-47E7-AA73-DE41C0914657}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Omego.SimpleFtp", "core\Omego.SimpleFtp\Omego.SimpleFtp.csproj", "{07286BE6-87E0-4ACD-82E1-55F4889C8C22}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Omego.SimpleFtp.Tests.Integration", "tests\integration\Omego.SimpleFtp.Tests.Integration\Omego.SimpleFtp.Tests.Integration.csproj", "{EA422389-3860-4325-BE23-CB5020C5A75D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Omego.SimpleFtp.Tests.Unit", "tests\unit\Omego.SimpleFtp.Tests.Unit\Omego.SimpleFtp.Tests.Unit.csproj", "{9791FAC9-D6F3-4E45-B7EC-640B19A880AF}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{07286BE6-87E0-4ACD-82E1-55F4889C8C22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07286BE6-87E0-4ACD-82E1-55F4889C8C22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07286BE6-87E0-4ACD-82E1-55F4889C8C22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07286BE6-87E0-4ACD-82E1-55F4889C8C22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA422389-3860-4325-BE23-CB5020C5A75D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA422389-3860-4325-BE23-CB5020C5A75D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA422389-3860-4325-BE23-CB5020C5A75D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA422389-3860-4325-BE23-CB5020C5A75D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9791FAC9-D6F3-4E45-B7EC-640B19A880AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9791FAC9-D6F3-4E45-B7EC-640B19A880AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9791FAC9-D6F3-4E45-B7EC-640B19A880AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9791FAC9-D6F3-4E45-B7EC-640B19A880AF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{CEB8E499-F36C-4785-BF3D-24E7C00A7728} = {51014A67-0FC4-4D35-8C13-D58737013451}
 		{C7C5669A-10A7-47E7-AA73-DE41C0914657} = {51014A67-0FC4-4D35-8C13-D58737013451}
+		{07286BE6-87E0-4ACD-82E1-55F4889C8C22} = {EB3CCF76-AB42-489A-8ED5-5A304BBFD329}
+		{EA422389-3860-4325-BE23-CB5020C5A75D} = {CEB8E499-F36C-4785-BF3D-24E7C00A7728}
+		{9791FAC9-D6F3-4E45-B7EC-640B19A880AF} = {C7C5669A-10A7-47E7-AA73-DE41C0914657}
 	EndGlobalSection
 EndGlobal
