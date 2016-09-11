@@ -43,6 +43,9 @@
     <Compile Include="FtpServer.cs" />
     <Compile Include="FtpServerStatus.cs" />
     <Compile Include="IFtpServer.cs" />
+    <Compile Include="IOperatingSystem.cs" />
+    <Compile Include="ISystemProcess.cs" />
+    <Compile Include="OperatingSystem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

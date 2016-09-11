@@ -20,7 +20,7 @@
         [Test]
         public void GetTempFilePathShouldReturnFilePath()
         {
-            var path = Substitute.For<System.IO.Abstractions.PathBase>();
+            var path = Substitute.For<PathBase>();
             path.GetTempPath().Returns(@"C:\temp");
             path.GetTempFileName().Returns("something");
 

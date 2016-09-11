@@ -17,7 +17,7 @@
 
         private FtpServer GetFtpServer()
         {
-            return new FtpServer(new FtpConfiguration("Home", 3435), new FileSystem());
+            return new FtpServer(new FtpConfiguration("Home", 3435), new FileSystem(), new OperatingSystem());
         }
     }
 }
