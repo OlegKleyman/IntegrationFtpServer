@@ -2,7 +2,11 @@
 {
     public class FtpServer
     {
-        public FtpServer(string homeDirectory, int port)
+        public FtpServer()
+        {
+        }
+
+        public void Start(string homeDirectory, int port)
         {
             throw new System.NotImplementedException();
         }
