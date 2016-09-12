@@ -22,6 +22,8 @@
             var server = GetFtpServer();
 
             server.Start();
+            
+            server.Stop();
         }
 
         private FtpServer GetFtpServer()
