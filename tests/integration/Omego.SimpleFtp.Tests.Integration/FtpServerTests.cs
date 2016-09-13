@@ -3,6 +3,7 @@
     using System.IO;
     using System.IO.Abstractions;
     using System.Linq;
+    using System.Net;
 
     using FluentAssertions;
 
@@ -18,13 +19,18 @@
         [OneTimeSetUp]
         public void Setup()
         {
-            Directory.CreateDirectory(ftpHomeDirectory);
+            Directory.CreateDirectory(ftpHomeDirectory).CreateSubdirectory("someDirectory");
         }
 
         [SetUp]
         public void ClearFtpDirectory()
         {
             foreach (var file in Directory.GetFiles(ftpHomeDirectory))
+            {
+                File.Delete(file);
+            }
+
+            foreach (var file in Directory.GetFiles(Path.Combine(ftpHomeDirectory, "someDirectory")))
             {
                 File.Delete(file);
             }
@@ -41,6 +47,28 @@
             File.Create(Path.Combine(ftpHomeDirectory, "TestFile1.txt")).Dispose();
 
             server.GetFiles(".").ShouldAllBeEquivalentTo(new[] { "someFile.csv", "TestFile1.txt" });
+        }
+
+        [Test]
+        public void UploadingFileShouldUploadFile()
+        {
+            server = GetFtpServer();
+
+            server.Start();
+
+            var ftpRequest = (FtpWebRequest)WebRequest.Create(@"ftp://localhost:3435/someDirectory/someFile.csv");
+
+            ftpRequest.Method = WebRequestMethods.Ftp.UploadFile;
+
+            using (var request = ftpRequest.GetRequestStream())
+            {
+                using (var writer = new StreamWriter(request))
+                {
+                    writer.WriteLine("test");
+                }
+            }
+
+            server.GetFiles("someDirectory").ShouldAllBeEquivalentTo(new[] { "someFile.csv" });
         }
 
         [TearDown]
