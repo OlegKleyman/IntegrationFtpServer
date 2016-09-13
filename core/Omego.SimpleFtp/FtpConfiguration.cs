@@ -2,12 +2,28 @@
 {
     using System;
 
+    /// <summary>
+    /// Represents an FTP configuration.
+    /// </summary>
     public class FtpConfiguration
     {
-        public string HomeDirectory { get; private set; }
+        /// <summary>
+        /// Gets the <see cref="HomeDirectory"/>.
+        /// </summary>
+        /// <value>The home directory for the FTP server.</value>
+        public string HomeDirectory { get; }
 
-        public int Port { get; private set; }
+        /// <summary>
+        /// Gets the <see cref="Port"/>.
+        /// </summary>
+        /// <value>The FTP server port.</value>
+        public int Port { get; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FtpConfiguration"/> class.
+        /// </summary>
+        /// <param name="homeDirectory">The home directory of the FTP server.</param>
+        /// <param name="port">The FTP server port.</param>
         public FtpConfiguration(string homeDirectory, int port)
         {
             if (homeDirectory == null) throw new ArgumentNullException(nameof(homeDirectory));
