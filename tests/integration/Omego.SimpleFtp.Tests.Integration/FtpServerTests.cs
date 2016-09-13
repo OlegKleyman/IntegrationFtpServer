@@ -36,8 +36,11 @@
             server = GetFtpServer();
 
             server.Start();
-            File.Create(Path.Combine(ftpHomeDirectory, "someFile.csv", "TestFile1.txt"));
-            server.GetFiles("/").ShouldAllBeEquivalentTo(new[] { "someFile.csv", "TestFile1.txt" });
+
+            File.Create(Path.Combine(ftpHomeDirectory, "someFile.csv")).Dispose();
+            File.Create(Path.Combine(ftpHomeDirectory, "TestFile1.txt")).Dispose();
+
+            server.GetFiles(".").ShouldAllBeEquivalentTo(new[] { "someFile.csv", "TestFile1.txt" });
         }
 
         [TearDown]
