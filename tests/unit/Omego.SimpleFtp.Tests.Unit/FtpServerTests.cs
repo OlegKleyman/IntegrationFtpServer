@@ -15,16 +15,6 @@
     [TestFixture]
     public class FtpServerTests
     {
-        [Test]
-        public void ConstructorShouldSetConfigurationProperty()
-        {
-            var ftpConfiguration = new FtpConfiguration("Home", 21);
-
-            var server = new FtpServer(ftpConfiguration, new MockFileSystem(), Substitute.For<IOperatingSystem>());
-
-            server.Configuration.ShouldBeEquivalentTo(ftpConfiguration);
-        }
-
         [TestCaseSource(typeof(FtpServerTestsSource),
              nameof(FtpServerTestsSource.ConstructorShouldThrowArgumentExceptionWhenArgumentsAreInvalidCases))]
         public void ConstructorShouldThrowArgumentExceptionWhenArgumentsAreInvalid(
@@ -33,7 +23,8 @@
             Type expectedType,
             FtpConfiguration configuration)
         {
-            Action constructor = () => new FtpServer(configuration, new MockFileSystem(), Substitute.For<IOperatingSystem>());
+            Action constructor =
+                () => new FtpServer(configuration, new MockFileSystem(), Substitute.For<IOperatingSystem>());
 
             constructor.ShouldThrow<ArgumentException>()
                 .WithMessage(expectedMessage)
@@ -42,25 +33,6 @@
                     "the parameter name should be of the problematic parameter")
                 .And.Should()
                 .BeOfType(expectedType);
-        }
-
-        [Test]
-        public void StartShouldStartServer()
-        {
-            var server = FtpServerTestsSource.GetFtpServer();
-
-            server.Start();
-
-            server.Status.ShouldBeEquivalentTo(FtpServerStatus.Running);
-        }
-
-        [Test]
-        public void StopShouldStopProcess()
-        {
-            var server = FtpServerTestsSource.GetFtpServer();
-            server.Start();
-            server.Stop();
-            server.Status.Should().Be(FtpServerStatus.Stopped);
         }
 
         [TestCaseSource(typeof(FtpServerTestsSource),
@@ -86,6 +58,37 @@
 
         private class FtpServerTestsSource
         {
+            public static IEnumerable ConstructorShouldThrowArgumentExceptionWhenArgumentsAreInvalidCases
+                =>
+                new[]
+                    {
+                        new object[]
+                            {
+                                "configuration", "Value cannot be null.\r\nParameter name: configuration",
+                                typeof(ArgumentNullException), null
+                            }
+                    };
+
+            public static IEnumerable StatusShouldReturnServerStatusCases
+                =>
+                new[]
+                    {
+                        new object[] { GetFtpServer(), FtpServerStatus.Stopped },
+                        new object[] { StartServer(GetFtpServer()), FtpServerStatus.Running },
+                        new object[] { StopServer(GetFtpServer()), FtpServerStatus.Stopped }
+                    };
+
+            public static IEnumerable StopShouldThrowInvalidOperationExceptionIfServerIsStoppedCases
+                => new[] { new object[] { GetFtpServer() }, new object[] { StopServer(GetFtpServer()) } };
+
+            public static IEnumerable GetFilesShouldReturnFilesCases
+                =>
+                new[]
+                    {
+                        new object[] { GetFtpServer(), ".", new[] { "someFile.csv", "TestFile1.txt" } },
+                        new object[] { GetFtpServer(), "testDirectory", new[] { "innerFile.exe" } }
+                    };
+
             public static FtpServer GetFtpServer()
             {
                 var mockFileSystem =
@@ -132,37 +135,35 @@
 
                 return ftpServer;
             }
+        }
 
-            public static IEnumerable ConstructorShouldThrowArgumentExceptionWhenArgumentsAreInvalidCases
-                =>
-                new[]
-                    {
-                        new object[]
-                            {
-                                "configuration", "Value cannot be null.\r\nParameter name: configuration",
-                                typeof(ArgumentNullException), null
-                            }
-                    };
+        [Test]
+        public void ConstructorShouldSetConfigurationProperty()
+        {
+            var ftpConfiguration = new FtpConfiguration("Home", 21);
 
-            public static IEnumerable StatusShouldReturnServerStatusCases
-                =>
-                new[]
-                    {
-                        new object[] { GetFtpServer(), FtpServerStatus.Stopped },
-                        new object[] { StartServer(GetFtpServer()), FtpServerStatus.Running },
-                        new object[] { StopServer(GetFtpServer()), FtpServerStatus.Stopped }
-                    };
+            var server = new FtpServer(ftpConfiguration, new MockFileSystem(), Substitute.For<IOperatingSystem>());
 
-            public static IEnumerable StopShouldThrowInvalidOperationExceptionIfServerIsStoppedCases
-                => new[] { new object[] { GetFtpServer() }, new object[] { StopServer(GetFtpServer()) } };
+            server.Configuration.ShouldBeEquivalentTo(ftpConfiguration);
+        }
 
-            public static IEnumerable GetFilesShouldReturnFilesCases
-                =>
-                new[]
-                    {
-                        new object[] { GetFtpServer(), ".", new[] { "someFile.csv", "TestFile1.txt" } },
-                        new object[] { GetFtpServer(), "testDirectory", new[] { "innerFile.exe" } }
-                    };
+        [Test]
+        public void StartShouldStartServer()
+        {
+            var server = FtpServerTestsSource.GetFtpServer();
+
+            server.Start();
+
+            server.Status.ShouldBeEquivalentTo(FtpServerStatus.Running);
+        }
+
+        [Test]
+        public void StopShouldStopProcess()
+        {
+            var server = FtpServerTestsSource.GetFtpServer();
+            server.Start();
+            server.Stop();
+            server.Status.Should().Be(FtpServerStatus.Stopped);
         }
     }
 }
