@@ -33,8 +33,40 @@
     <DocumentationFile>bin\Release\Omego.SimpleFtp.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Assets.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Assets.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Extensions\PathBase.cs" />
+    <Compile Include="FtpConfiguration.cs" />
+    <Compile Include="FtpServer.cs" />
+    <Compile Include="FtpServerStatus.cs" />
+    <Compile Include="IFtpServer.cs" />
+    <Compile Include="IOperatingSystem.cs" />
+    <Compile Include="ISystemProcess.cs" />
+    <Compile Include="OperatingSystem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SystemProcess.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Assets.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Assets.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="Resources\ftpdmin.exe" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.IO.Abstractions, Version=2.0.0.124, Culture=neutral, PublicKeyToken=d480b5b72fb413da, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.IO.Abstractions.2.0.0.124\lib\net40\System.IO.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
