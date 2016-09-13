@@ -2,6 +2,9 @@
 {
     using System.IO;
     using System.IO.Abstractions;
+    using System.Linq;
+
+    using FluentAssertions;
 
     using NUnit.Framework;
 
@@ -10,20 +13,40 @@
     {
         private readonly string ftpHomeDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
 
+        private FtpServer server;
+
         [OneTimeSetUp]
         public void Setup()
         {
             Directory.CreateDirectory(ftpHomeDirectory);
         }
 
-        [Test]
-        public void FilesShouldBeListed()
+        [SetUp]
+        public void ClearFtpDirectory()
         {
-            var server = GetFtpServer();
+            foreach (var file in Directory.GetFiles(ftpHomeDirectory))
+            {
+                File.Delete(file);
+            }
+        }
+
+        [Test]
+        public void GetFilesShouldListFiles()
+        {
+            server = GetFtpServer();
 
             server.Start();
-            
-            server.Stop();
+            File.Create(Path.Combine(ftpHomeDirectory, "someFile.csv", "TestFile1.txt"));
+            server.GetFiles("/").ShouldAllBeEquivalentTo(new[] { "someFile.csv", "TestFile1.txt" });
+        }
+
+        [TearDown]
+        public void StopServer()
+        {
+            if (server != null && server.Status == FtpServerStatus.Running)
+            {
+                server.Stop();
+            }
         }
 
         private FtpServer GetFtpServer()

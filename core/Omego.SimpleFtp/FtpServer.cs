@@ -1,6 +1,7 @@
 ﻿namespace Omego.SimpleFtp
 {
     using System;
+    using System.Collections.Generic;
     using System.IO.Abstractions;
 
     using Omego.SimpleFtp.Extensions;
@@ -46,6 +47,11 @@
             if (Status == FtpServerStatus.Stopped) throw new InvalidOperationException("Server is not running.");
 
             process.Kill();
+        }
+
+        public IEnumerable<string> GetFiles(string relativePath)
+        {
+            throw new NotImplementedException();
         }
     }
 }
