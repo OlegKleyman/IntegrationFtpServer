@@ -7,6 +7,11 @@
     [TestFixture]
     public class OperatingSystemTests
     {
+        private static OperatingSystem GetOperatingSystem()
+        {
+            return new OperatingSystem();
+        }
+
         [Test]
         public void StartProcessShouldStartTheProcess()
         {
@@ -17,11 +22,6 @@
             systemProcess.Should().NotBeNull();
 
             systemProcess.Kill();
-        }
-
-        private static OperatingSystem GetOperatingSystem()
-        {
-            return new OperatingSystem();
         }
     }
 }

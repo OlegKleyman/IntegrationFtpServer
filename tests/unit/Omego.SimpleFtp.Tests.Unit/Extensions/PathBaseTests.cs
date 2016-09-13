@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections;
-    using System.IO.Abstractions.TestingHelpers;
 
     using FluentAssertions;
 
@@ -17,16 +16,6 @@
     [TestFixture]
     public class PathBaseTests
     {
-        [Test]
-        public void GetTempFilePathShouldReturnFilePath()
-        {
-            var path = Substitute.For<PathBase>();
-            path.GetTempPath().Returns(@"C:\temp");
-            path.GetTempFileName().Returns("something");
-
-            path.GetTempFilePath("exe").ShouldBeEquivalentTo(@"C:\temp\something\something.exe");
-        }
-
         [TestCaseSource(typeof(PathBaseTestsSource),
              nameof(PathBaseTestsSource.GetTempFilePathShouldThrowArgumentExceptionWhenArgumentsAreInvalidCases))]
         public void GetTempFilePathShouldThrowArgumentExceptionWhenArgumentsAreInvalid(
@@ -59,6 +48,16 @@
                                 null, null
                             }
                     };
+        }
+
+        [Test]
+        public void GetTempFilePathShouldReturnFilePath()
+        {
+            var path = Substitute.For<PathBase>();
+            path.GetTempPath().Returns(@"C:\temp");
+            path.GetTempFileName().Returns("something");
+
+            path.GetTempFilePath("exe").ShouldBeEquivalentTo(@"C:\temp\something\something.exe");
         }
     }
 }

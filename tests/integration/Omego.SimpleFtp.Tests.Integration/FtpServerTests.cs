@@ -2,7 +2,6 @@
 {
     using System.IO;
     using System.IO.Abstractions;
-    using System.Linq;
     using System.Net;
 
     using FluentAssertions;
@@ -12,6 +11,20 @@
     [TestFixture]
     public class FtpServerTests
     {
+        [SetUp]
+        public void ClearFtpDirectory()
+        {
+            foreach (var file in Directory.GetFiles(ftpHomeDirectory)) File.Delete(file);
+
+            foreach (var file in Directory.GetFiles(Path.Combine(ftpHomeDirectory, "someDirectory"))) File.Delete(file);
+        }
+
+        [TearDown]
+        public void StopServer()
+        {
+            if ((server != null) && (server.Status == FtpServerStatus.Running)) server.Stop();
+        }
+
         private readonly string ftpHomeDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
 
         private FtpServer server;
@@ -22,18 +35,9 @@
             Directory.CreateDirectory(ftpHomeDirectory).CreateSubdirectory("someDirectory");
         }
 
-        [SetUp]
-        public void ClearFtpDirectory()
+        private FtpServer GetFtpServer()
         {
-            foreach (var file in Directory.GetFiles(ftpHomeDirectory))
-            {
-                File.Delete(file);
-            }
-
-            foreach (var file in Directory.GetFiles(Path.Combine(ftpHomeDirectory, "someDirectory")))
-            {
-                File.Delete(file);
-            }
+            return new FtpServer(new FtpConfiguration(ftpHomeDirectory, 3435), new FileSystem(), new OperatingSystem());
         }
 
         [Test]
@@ -69,20 +73,6 @@
             }
 
             server.GetFiles("someDirectory").ShouldAllBeEquivalentTo(new[] { "someFile.csv" });
-        }
-
-        [TearDown]
-        public void StopServer()
-        {
-            if (server != null && server.Status == FtpServerStatus.Running)
-            {
-                server.Stop();
-            }
-        }
-
-        private FtpServer GetFtpServer()
-        {
-            return new FtpServer(new FtpConfiguration(ftpHomeDirectory, 3435), new FileSystem(), new OperatingSystem());
         }
     }
 }

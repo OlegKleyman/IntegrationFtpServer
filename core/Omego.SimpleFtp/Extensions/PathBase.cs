@@ -9,7 +9,7 @@
     {
         public static string GetTempFilePath(this PathAbstractions path, string extension)
         {
-            if(path == null) throw new ArgumentNullException(nameof(path));
+            if (path == null) throw new ArgumentNullException(nameof(path));
 
             var tempDirectory = path.GetTempPath();
             var tempName = Path.GetFileNameWithoutExtension(path.GetTempFileName());

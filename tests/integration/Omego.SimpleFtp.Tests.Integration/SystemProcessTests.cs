@@ -11,21 +11,13 @@
     [TestFixture]
     public class SystemProcessTests
     {
-        [Test]
-        public void KillShouldKillTheProcess()
-        {
-            var process = Process.Start("cmd.exe");
-
-            GetSystemProcess(process).Kill();
-
-            process.HasExited.Should().BeTrue();
-        }
-
-        [TestCaseSource(typeof(SystemProcessTestCases), nameof(SystemProcessTestCases.ConstructorShouldThrowArgumentExceptionWhenArgumentsAreInvalidCases))]
+        [TestCaseSource(typeof(SystemProcessTestCases),
+             nameof(SystemProcessTestCases.ConstructorShouldThrowArgumentExceptionWhenArgumentsAreInvalidCases))]
         public void ConstructorShouldThrowArgumentExceptionWhenArgumentsAreInvalid(
             string expectedParameterName,
             string expectedMessage,
-            Type expectedType,Process process)
+            Type expectedType,
+            Process process)
         {
             Action constructor = () => new SystemProcess(process);
 
@@ -36,29 +28,6 @@
                     "the parameter name should be of the problematic parameter")
                 .And.Should()
                 .BeOfType(expectedType);
-        }
-
-        [Test]
-        public void HasExitedShouldReturnTrueWhenProcessHasExited()
-        {
-            var process = Process.Start("cmd.exe");
-
-            GetSystemProcess(process).Kill();
-
-            process.HasExited.Should().BeTrue();
-        }
-
-        [Test]
-        public void HasExitedShouldReturnFalseWhenProcessHasNotExitedd()
-        {
-            var process = Process.Start("cmd.exe");
-
-            GetSystemProcess(process);
-
-            process.HasExited.Should().BeFalse();
-
-            process.Kill();
-            process.WaitForExit();
         }
 
         public static SystemProcess GetSystemProcess(Process process)
@@ -78,6 +47,39 @@
                                 typeof(ArgumentNullException), null
                             }
                     };
+        }
+
+        [Test]
+        public void HasExitedShouldReturnFalseWhenProcessHasNotExitedd()
+        {
+            var process = Process.Start("cmd.exe");
+
+            GetSystemProcess(process);
+
+            process.HasExited.Should().BeFalse();
+
+            process.Kill();
+            process.WaitForExit();
+        }
+
+        [Test]
+        public void HasExitedShouldReturnTrueWhenProcessHasExited()
+        {
+            var process = Process.Start("cmd.exe");
+
+            GetSystemProcess(process).Kill();
+
+            process.HasExited.Should().BeTrue();
+        }
+
+        [Test]
+        public void KillShouldKillTheProcess()
+        {
+            var process = Process.Start("cmd.exe");
+
+            GetSystemProcess(process).Kill();
+
+            process.HasExited.Should().BeTrue();
         }
     }
 }

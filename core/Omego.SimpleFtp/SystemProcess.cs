@@ -4,16 +4,16 @@
     using System.Diagnostics;
 
     /// <summary>
-    /// Represents a system process.
+    ///     Represents a system process.
     /// </summary>
     public class SystemProcess : ISystemProcess
     {
         private readonly Process process;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SystemProcess"/> class.
+        ///     Initializes a new instance of the <see cref="SystemProcess" /> class.
         /// </summary>
-        /// <param name="process">The <see cref="Process"/> to use for operations.</param>
+        /// <param name="process">The <see cref="Process" /> to use for operations.</param>
         public SystemProcess(Process process)
         {
             if (process == null) throw new ArgumentNullException(nameof(process));
@@ -22,7 +22,7 @@
         }
 
         /// <summary>
-        /// Kills the <see cref="ISystemProcess"/>.
+        ///     Kills the <see cref="ISystemProcess" />.
         /// </summary>
         public void Kill()
         {
@@ -31,7 +31,7 @@
         }
 
         /// <summary>
-        /// Gets <see cref="ISystemProcess.HasExited"/>.
+        ///     Gets <see cref="ISystemProcess.HasExited" />.
         /// </summary>
         /// <value>Whether or not the process has exited.</value>
         public bool HasExited => process.HasExited;
