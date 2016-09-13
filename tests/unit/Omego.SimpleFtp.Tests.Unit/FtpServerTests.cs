@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections;
+    using System.Collections.Generic;
     using System.IO.Abstractions;
     using System.IO.Abstractions.TestingHelpers;
 
@@ -77,16 +78,35 @@
             server.Status.Should().Be(expectedStatus);
         }
 
+        [TestCaseSource(typeof(FtpServerTestsSource), nameof(FtpServerTestsSource.GetFilesShouldReturnFilesCases))]
+        public void GetFilesShouldReturnFiles(FtpServer server, string path, IEnumerable<string> expectedFiles)
+        {
+            server.GetFiles(path).ShouldAllBeEquivalentTo(expectedFiles);
+        }
+
         private class FtpServerTestsSource
         {
             public static FtpServer GetFtpServer()
             {
+                var mockFileSystem =
+                    new MockFileSystem(
+                        new Dictionary<string, MockFileData>
+                            {
+                                    { @"c:\home\someFile.csv", new MockFileData(string.Empty) },
+                                    { @"c:\home\TestFile1.txt", new MockFileData(string.Empty) },
+                                    { @"c:\home\testDirectory\innerFile.exe", new MockFileData(string.Empty) },
+                                    { @"c:\Home", new MockDirectoryData() }
+                            });
+
                 var path = Substitute.For<PathBase>();
                 path.GetTempPath().Returns(@"C:\temp");
                 path.GetTempFileName().Returns("something");
+                path.GetDirectoryName(Arg.Any<string>())
+                    .Returns(info => mockFileSystem.Path.GetDirectoryName((string)info[0]));
 
                 var fileSystem = Substitute.For<IFileSystem>();
                 fileSystem.Path.Returns(path);
+                fileSystem.Directory.Returns(mockFileSystem.Directory);
 
                 var systemProcess = Substitute.For<ISystemProcess>();
                 systemProcess.HasExited.Returns(false);
@@ -95,7 +115,7 @@
                 var operatingSystem = Substitute.For<IOperatingSystem>();
                 operatingSystem.StartProcess(Arg.Any<string>(), Arg.Any<string>()).Returns(systemProcess);
 
-                return new FtpServer(new FtpConfiguration("Home", 21), fileSystem, operatingSystem);
+                return new FtpServer(new FtpConfiguration(@"C:\Home", 21), fileSystem, operatingSystem);
             }
 
             private static FtpServer StartServer(FtpServer ftpServer)
@@ -135,6 +155,14 @@
 
             public static IEnumerable StopShouldThrowInvalidOperationExceptionIfServerIsStoppedCases
                 => new[] { new object[] { GetFtpServer() }, new object[] { StopServer(GetFtpServer()) } };
+
+            public static IEnumerable GetFilesShouldReturnFilesCases
+                =>
+                new[]
+                    {
+                        new object[] { GetFtpServer(), ".", new[] { "someFile.csv", "TestFile1.txt" } },
+                        new object[] { GetFtpServer(), "testDirectory", new[] { "innerFile.exe" } }
+                    };
         }
     }
 }

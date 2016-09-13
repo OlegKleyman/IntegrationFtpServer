@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.IO.Abstractions;
 
     using Omego.SimpleFtp.Extensions;
@@ -51,7 +52,10 @@
 
         public IEnumerable<string> GetFiles(string relativePath)
         {
-            throw new NotImplementedException();
+            foreach (var file in fileSystem.Directory.GetFiles(Path.Combine(Configuration.HomeDirectory, relativePath)))
+            {
+                yield return Path.GetFileName(file);
+            }
         }
     }
 }
